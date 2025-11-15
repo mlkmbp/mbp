@@ -1,0 +1,19 @@
+db:
+  master:
+    pool:
+      max_open: 20
+      max_idle: 10
+      max_lifetime_sec: 600
+
+  log:
+    enable: true
+    pool:
+      max_open: 1
+      max_idle: 1
+      max_lifetime_sec: 0
+
+admin:
+  jwt_secret: "RK_111fHbE8yhJMK3W9691250LzjJ2caw0oVd3ydJek="
+
+logging:
+  level: off
