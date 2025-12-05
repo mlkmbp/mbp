@@ -563,6 +563,29 @@ function openEdit(r: Rule) {
   dialog.value = true
 }
 
+// 生成证书（host = 当前浏览器域名）
+async function handleGenerateTLS() {
+  const host = window.location.hostname || 'localhost'
+  const { data } = await api.get('/tls/generate', {
+    params: { host },
+  })
+
+  form.value.TLSCert = data.cert || ''
+  form.value.TLSKey = data.key || ''
+  form.value.TLSSNIGuard = host
+  ElMessage.success('TLS 证书已生成')
+}
+
+// 从后端配置里取证书
+async function handleLoadTLSFromConfig() {
+  const { data } = await api.get('/tls/config')
+
+  form.value.TLSCert = data.cert || ''
+  form.value.TLSKey = data.key || ''
+  form.value.TLSSNIGuard = data.sni_guard || ''
+  ElMessage.success('已加载配置中的证书')
+}
+
 /* ===================== 保存 ===================== */
 async function submit() {
   const ok = await formRef.value?.validate()
@@ -922,7 +945,7 @@ onMounted(()=>{ load(); loadUser() })
       <!-- 新增：接口名（仅 all/tcp/udp；提示 NAT 级别） -->
       <el-form-item v-if="showInterfaceName" label="接口名">
         <el-input v-model="(form as any).interface_name" clearable class="w-260" placeholder="如 eth0、ens18" />
-        <span class="text-muted ml-8">🥧NAT 级别；只保留总配额判断和流量记录(conntrack)</span>
+        <span class="text-muted ml-8">🥧NAT 级别；只保留总配额判断和流量记录(apt install conntrack)</span>
       </el-form-item>
 
       <!-- 目标地址/端口（支持一键清空 -> 动态目的地址） -->
@@ -1006,6 +1029,23 @@ onMounted(()=>{ load(); loadUser() })
       <!-- TLS -->
       <el-form-item v-if="needTLSCertKey" label="TLS 证书" prop="TLSCert">
         <el-input v-model="form.TLSCert" type="textarea" :autosize="{ minRows: 3, maxRows: 12 }" placeholder="粘贴 PEM 或证书路径（必填：tls-* 协议）" />
+         <!-- 按钮区域 -->
+  <div class="tls-tools" style="margin-top: 8px;">
+    <el-button
+      size="small"
+      type="primary"
+      @click="handleGenerateTLS"
+    >
+      生成证书（当前域名）
+    </el-button>
+    <el-button
+      size="small"
+      @click="handleLoadTLSFromConfig"
+      style="margin-left: 8px;"
+    >
+      使用配置中的证书
+    </el-button>
+  </div>
       </el-form-item>
       <el-form-item v-if="needTLSCertKey" label="TLS 私钥" prop="TLSKey">
         <el-input v-model="form.TLSKey" type="textarea" :autosize="{ minRows: 3, maxRows: 12 }" placeholder="粘贴 PEM 或私钥路径（必填：tls-* 协议）" />

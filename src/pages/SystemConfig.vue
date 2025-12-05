@@ -115,13 +115,15 @@ async function restart() {
   try {
     restarting.value = true
     await api.post('/restart')
-    ElMessage.success('已触发重启，稍候刷新页面')
+    ElMessage.success('已触发重启，请重新登陆')
+    logout()
   } catch (e:any) {
     ElMessage.error('重启失败：' + (e?.message || e))
   } finally {
     restarting.value = false
   }
 }
+function logout() { localStorage.removeItem('token'); location.href = '/login' }
 
 /* ---------- 初始化 ---------- */
 onMounted(load)
