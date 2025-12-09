@@ -53,6 +53,9 @@ func (s *Server) Router() *gin.Engine {
 
 		auth.GET("/rule", s.listRule)
 
+		auth.GET("/tls/generate", s.generateTLS)
+		auth.GET("/tls/config", s.getTLSConfig)
+
 	}
 
 	admin := auth.Group("/")
