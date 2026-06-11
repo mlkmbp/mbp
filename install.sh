@@ -298,7 +298,7 @@ geo:
   geo_site:
     - "${GEO_DIR}/geosite.dat"
   geo_ip:
-    - "${GEO_DIR}/geoip.dat"
+  #  - "${GEO_DIR}/geoip.dat"
 
 db:
   forwarder:
