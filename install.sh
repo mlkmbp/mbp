@@ -532,7 +532,7 @@ tls_request_single_interactive(){
       while true; do
         read -rp "联系邮箱（首次安装需注册 CA，回车随机生成）： " e || true
         if [ -z "${e:-}" ]; then
-          e="admin${RANDOM}@example.com"
+          e="{RANDOM}@{RANDOM}.com"
           ok "已随机生成邮箱: $e"
           break
         fi
@@ -886,7 +886,7 @@ while true; do
           while true; do
             read -rp "联系邮箱（首次安装需注册 CA，回车随机生成）： " e || true
             if [ -z "${e:-}" ]; then
-              e="admin${RANDOM}@example.com"
+              e="{RANDOM}@{RANDOM}.com"
               ok "已随机生成邮箱: $e"
               break
             fi
