@@ -532,14 +532,14 @@ tls_request_single_interactive(){
       while true; do
         read -rp "联系邮箱（首次安装需注册 CA，回车随机生成）： " e || true
         if [ -z "${e:-}" ]; then
-          e="{RANDOM}@{RANDOM}.com"
+          e="$(tr -dc 'a-z0-9' </dev/urandom | head -c 8)@$(tr -dc 'a-z0-9' </dev/urandom | head -c 6).com"
           ok "已随机生成邮箱: $e"
           break
         fi
         is_valid_email "${e:-}" && break || err "邮箱格式不正确"
       done
     else
-      e="dummy@example.com"
+      e="$(tr -dc 'a-z0-9' </dev/urandom | head -c 8)@$(tr -dc 'a-z0-9' </dev/urandom | head -c 6).com"
     fi
 
     if tls_issue_single "$d" "$e" "0" "$d_v6"; then
@@ -886,14 +886,14 @@ while true; do
           while true; do
             read -rp "联系邮箱（首次安装需注册 CA，回车随机生成）： " e || true
             if [ -z "${e:-}" ]; then
-              e="{RANDOM}@{RANDOM}.com"
+              e="$(tr -dc 'a-z0-9' </dev/urandom | head -c 8)@$(tr -dc 'a-z0-9' </dev/urandom | head -c 6).com"
               ok "已随机生成邮箱: $e"
               break
             fi
             is_valid_email "${e:-}" && break || err "邮箱格式不正确"
           done
         else
-          e="dummy@example.com"
+          e="$(tr -dc 'a-z0-9' </dev/urandom | head -c 8)@$(tr -dc 'a-z0-9' </dev/urandom | head -c 6).com"
         fi
 
         if tls_issue_single "$d" "$e" "1"; then break; else warn "签发失败，继续重试（回车返回菜单）"; fi
