@@ -293,6 +293,8 @@ generate_config_file(){
 listen:
   address: "${LISTEN_ADDR}"
   port: ${LISTEN_PORT}
+  ip_white_list:
+  #  - "0.0.0.0"
 
 geo:
   geo_site:
